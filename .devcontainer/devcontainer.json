@@ -1,0 +1,40 @@
+{
+  "name": "TypeScript Dev",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "NODE_VERSION": "20",
+      "USERNAME": "vscode"
+    }
+  },
+  "containerEnv": {
+    "TZ": "UTC",
+    "NODE_ENV": "development"
+  },
+  "remoteEnv": {
+    "API_BASE_URL": "${localEnv:API_BASE_URL}",
+    "INTERNAL_API_KEY": "${localEnv:INTERNAL_API_KEY}",
+    "SSH_AUTH_SOCK": "/ssh-agent"
+  },
+  "workspaceFolder": "/workspace",
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+    "source=${localEnv:SSH_AUTH_SOCK},target=/ssh-agent,type=bind",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached,readonly"
+  ],
+  "postCreateCommand": "npm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "typescript.tsdk": "node_modules/typescript/lib"
+      }
+    }
+  },
+  "remoteUser": "vscode"
+}
